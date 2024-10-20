@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-cli-service build",
-    "deploy": "gh-pages -d dist https://github.com/NourEldinIsmail/vue-demo-project.git",
+    "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --fix",
     "format": "prettier --write src/"
