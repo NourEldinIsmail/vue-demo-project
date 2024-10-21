@@ -1,34 +1,49 @@
 <template>
     <div class="lessons-grid">
-        <div v-for="(lesson, index) in lessons" :key="index" class="lesson-card">
-        <img :src="lesson.icon" :alt="lesson.Sport + ' icon'" class="lesson-icon" />
-        <div class="lesson-details">
-          <h2>{{ lesson.Sport }}</h2>
-          <p>Location: {{ lesson.Location }}</p>
-          <p>Price: {{ lesson.Price }}</p>
-          <p>Spaces: {{ lesson.Spaces }}</p>
-        </div>
+        <div v-for="(lesson, index) in lessons.filter(lesson => matchQuery(lesson))" :key="index" class="lesson-card">
+            <img :src="lesson.icon" :alt="lesson.Sport + ' icon'" class="lesson-icon" />
+            <div class="lesson-details">
+                <h2>{{ lesson.Sport }}</h2>
+                <p>Location: {{ lesson.Location }}</p>
+                <p>Price: {{ lesson.Price }}</p>
+                <p>Spaces: {{ lesson.Spaces }}</p>
+            </div>
 
-        <button
-            v-on:click="emit('addToCart', index)"
-            :disabled="lesson.Spaces === 0"
-            class="add-to-cart-button"
-        >
-            Add to Cart
-        </button>
+            <button
+                v-on:click="emit('addToCart', lesson.id)"
+                :disabled="lesson.Spaces === 0"
+                class="add-to-cart-button"
+            >
+                Add to Cart
+            </button>
       </div>
     </div>
   </template>
   
   <script setup>
-    defineProps({
+    const props = defineProps({
         lessons: {
-        type: Array,
-        required: true
+            type: Array,
+            required: true
+        },
+        searchQuery: {
+            type: String
         }
     })
 
     const emit = defineEmits(['addToCart'])
+
+    const matchQuery = (lesson) => {
+        if(props.searchQuery === ''){
+            return true
+        }
+        return (
+            lesson.Sport.toLowerCase().includes(props.searchQuery.toLowerCase()) ||
+            lesson.Location.toLowerCase().includes(props.searchQuery.toLowerCase()) ||
+            lesson.Price.toLowerCase().includes(props.searchQuery.toLowerCase()) ||
+            String(lesson.Spaces).includes(props.searchQuery)
+        )
+    }
   </script>
   
   <style scoped>

@@ -3,17 +3,21 @@
       <div class="site-brand">
         <router-link to="/" class="site-name">{{ siteName }}</router-link>
       </div>
-      <button class="cart-button" v-on:click="$emit('toggleCart')">
+      <button class="cart-button" v-on:click="$emit('toggleCart')" :disabled="props.cartDisabled">
         <img src="https://img.icons8.com/ios-filled/50/000000/shopping-cart.png" alt="Cart" class="cart-icon" />
       </button>
     </header>
   </template>
   
   <script setup>
-  defineProps({
+  const props = defineProps({
     siteName: {
       type: String,
       default: 'My Website'
+    },
+    cartDisabled: {
+        type: Boolean,
+        default: true
     }
   })
   </script>

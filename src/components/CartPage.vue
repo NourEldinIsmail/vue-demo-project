@@ -5,26 +5,48 @@
       <ul class="cart-list">
         <li v-for="(item, index) in cart" :key="index" class="cart-item">
           <span class="cart-item-name">{{ item.Sport }} - Quantity: {{ item.quantity }}</span>
-          <button @click="removeItem(index)" class="remove-button">Remove</button>
+          <button v-on:click="removeItem(item.id)" class="remove-button">Remove</button>
         </li>
       </ul>
 
       <div class="checkout-form">
         <h3>Checkout</h3>
+        
         <label for="name">Name:</label>
-        <input type="text" id="name" v-model="customerName" placeholder="Enter your name" />
+        <input 
+          type="text" 
+          id="name" 
+          v-model="customerName" 
+          placeholder="Enter your name"
+          @input="validateName"
+        />
+        <p v-if="!isNameValid" class="error-msg">Name can only contain letters.</p>
 
         <label for="phone">Phone:</label>
-        <input type="tel" id="phone" v-model="customerPhone" placeholder="Enter your phone" />
+        <input 
+          type="tel" 
+          id="phone" 
+          v-model="customerPhone" 
+          placeholder="Enter your phone"
+          @input="validatePhone"
+        />
+        <p v-if="!isPhoneValid" class="error-msg">Phone must contain digits only.</p>
 
-        <button @click="checkout" class="checkout-button">Checkout</button>
+        <button 
+          @click="$emit('checkout', customerName, customerPhone)" 
+          class="checkout-button" 
+          :disabled="!isFormValid"
+        >
+          Checkout
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+
 const props = defineProps({
   cart: {
     type: Array,
@@ -38,16 +60,29 @@ const props = defineProps({
 
 const customerName = ref('')
 const customerPhone = ref('')
+const isNameValid = ref(true)
+const isPhoneValid = ref(true)
+
+// Function to validate name (only letters allowed)
+const validateName = () => {
+  const nameRegex = /^[a-zA-Z]+$/  // Only letters
+  isNameValid.value = nameRegex.test(customerName.value)
+}
+
+// Function to validate phone (only digits allowed)
+const validatePhone = () => {
+  const phoneRegex = /^\d+$/  // Only digits
+  isPhoneValid.value = phoneRegex.test(customerPhone.value)
+}
+
+// Computed property to check if the form is valid (both fields must be valid)
+const isFormValid = computed(() => isNameValid.value && isPhoneValid.value && customerName.value && customerPhone.value)
 
 // Function to handle removing an item from the cart
 const removeItem = (index) => {
   props.onRemove(index)
 }
 
-// Function to handle checkout
-const checkout = () => {
-  alert(`Checkout successful for ${customerName.value} with phone ${customerPhone.value}`)
-}
 </script>
 
 <style scoped>
@@ -137,6 +172,11 @@ input[type="tel"] {
   margin-bottom: 1rem;
 }
 
+.error-msg {
+  color: red;
+  font-size: 0.9rem;
+}
+
 .checkout-button {
   background-color: #4CAF50;
   color: white;
@@ -148,7 +188,12 @@ input[type="tel"] {
   width: 100%;
 }
 
-.checkout-button:hover {
+.checkout-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.checkout-button:hover:not(:disabled) {
   background-color: #45a049;
 }
 </style>
