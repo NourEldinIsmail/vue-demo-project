@@ -119,8 +119,8 @@ watch([sortField, sortOrder, lessonsList], () => {
 
 <template>
   <SiteHeader siteName="My Awesome Store" :cartDisabled="cart.length === 0" @toggleCart="toggleCart" />
+  <SideBar :selectedSortField="sortField" :selectedSortOrder="sortOrder" @updateSort="updateSorting" />
   <main>
-    <SideBar :selectedSortField="sortField" :selectedSortOrder="sortOrder" @updateSort="updateSorting" />
     <SearchBox @updateSearchQuery="updateSearchQuery" />
     <LessonsDisplay :lessons="lessonsList" :searchQuery="searchQuery" @addToCart="addToCart"/>
     <CartPage v-if="showCart" :cart="cart" @removeFromCart="removeFromCart" @checkout="checkout"/>

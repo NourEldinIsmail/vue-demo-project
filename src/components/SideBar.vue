@@ -62,7 +62,6 @@
     background-color: #f4f4f4;
     width: 250px;
     height: 100%;
-    position: fixed;
     top: 0;
     left: 0;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);

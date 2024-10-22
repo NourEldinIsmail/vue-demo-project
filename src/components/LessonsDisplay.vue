@@ -106,5 +106,11 @@
         width: 600px;
     }
   }
+
+  @media (max-width: 700px) {
+    .lessons-grid {
+        width: 300px;
+    }
+  }
   </style>
   
