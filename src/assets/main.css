@@ -1,5 +1,17 @@
 @import './base.css';
 
+body {
+  background-color: #F4F4F7;
+}
+
+button {
+  background: linear-gradient(45deg, #5A70E0, #7652DE);
+}
+
+button:hover {
+  background: linear-gradient(45deg, #7287F2, #8D6CF0);
+}
+
 #app {
   /* max-width: 1280px; */
   padding: 2rem;
@@ -16,7 +28,7 @@ a,
 
 main {
   margin-left: 250px;
-  margin-top: 30px;
+  margin-top: 70px;
 }
 
 @media (hover: hover) {
@@ -27,7 +39,6 @@ main {
 
 @media (min-width: 1024px) {
   body {
-    display: flex;
     place-items: center;
   }
 

@@ -1,10 +1,19 @@
 <template>
     <header class="site-header">
       <div class="site-brand">
-        <router-link to="/" class="site-name">{{ siteName }}</router-link>
+        <p class="site-name">{{ siteName }}</p>
       </div>
-      <button class="cart-button" v-on:click="$emit('toggleCart')" :disabled="props.cartDisabled">
-        <img src="https://img.icons8.com/ios-filled/50/000000/shopping-cart.png" alt="Cart" class="cart-icon" />
+      <button
+        class="cart-button"
+        v-on:click="$emit('toggleCart')"
+        :disabled="props.cartDisabled"
+      >
+        <span class="cart-text">Cart</span>
+        <img
+          src="https://img.icons8.com/ios-filled/50/000000/shopping-cart.png"
+          alt="Cart"
+          class="cart-icon"
+        />
       </button>
     </header>
   </template>
@@ -13,13 +22,13 @@
   const props = defineProps({
     siteName: {
       type: String,
-      default: 'My Website'
+      default: 'My Website',
     },
     cartDisabled: {
-        type: Boolean,
-        default: true
-    }
-  })
+      type: Boolean,
+      default: true,
+    },
+  });
   </script>
   
   <style scoped>
@@ -28,7 +37,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #333;
+    background: linear-gradient(45deg, #5A70e0, #7652de);
     color: #fff;
     position: fixed; /* Fixes the header to the top */
     top: 0; /* Positions it at the top */
@@ -50,17 +59,33 @@
   }
   
   .cart-button {
-    background-color: transparent;
+    background: #f4f4f7; /* Updated background color */
     border: none;
+    border-radius: 20px; /* Rounded corners */
     cursor: pointer;
-    padding: 5px;
+    padding: 8px 12px; /* Padding for button */
     display: flex;
     align-items: center;
+    opacity: 1; /* Fully visible when enabled */
+  }
+
+  .cart-button:hover {
+    background: #c1c1c2;
+  }
+  
+  .cart-button:disabled {
+    opacity: 0.5; /* Dim button when disabled */
+    cursor: not-allowed; /* Change cursor when disabled */
+  }
+  
+  .cart-text {
+    margin-right: 5px; /* Space between text and icon */
+    font-weight: bold; /* Bold text */
   }
   
   .cart-icon {
-    width: 30px;
-    height: 30px;
+    width: 24px; /* Adjusted icon size */
+    height: 24px; /* Adjusted icon size */
   }
   </style>
   

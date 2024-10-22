@@ -5,7 +5,7 @@
       <ul class="cart-list">
         <li v-for="(item, index) in cart" :key="index" class="cart-item">
           <span class="cart-item-name">{{ item.Sport }} - Quantity: {{ item.quantity }}</span>
-          <button v-on:click="removeItem(item.id)" class="remove-button">Remove</button>
+          <button v-on:click="$emit('removeFromCart', item.id)" class="remove-button">Remove</button>
         </li>
       </ul>
 
@@ -47,15 +47,11 @@
 <script setup>
 import { ref, computed } from 'vue'
 
-const props = defineProps({
+defineProps({
   cart: {
     type: Array,
     required: true
   },
-  onRemove: {
-    type: Function,
-    required: true
-  }
 })
 
 const customerName = ref('')
@@ -77,11 +73,6 @@ const validatePhone = () => {
 
 // Computed property to check if the form is valid (both fields must be valid)
 const isFormValid = computed(() => isNameValid.value && isPhoneValid.value && customerName.value && customerPhone.value)
-
-// Function to handle removing an item from the cart
-const removeItem = (index) => {
-  props.onRemove(index)
-}
 
 </script>
 

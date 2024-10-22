@@ -101,7 +101,7 @@
     cursor: not-allowed;
   }
 
-  @media (max-width: 350px) {
+  @media (max-width: 1430px) {
     .lessons-grid {
         width: 600px;
     }

@@ -1,7 +1,5 @@
 <template>
     <div class="sort-sidebar">
-      <h2>Sort Lessons</h2>
-  
       <div class="sort-section">
         <label for="sort-field">Sort by:</label>
         <select id="sort-field" v-model="localSortField">
@@ -69,6 +67,7 @@
     left: 0;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     color: #333;
+    margin-top: 70px;
   }
   
   h2 {
