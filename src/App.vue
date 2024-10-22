@@ -54,14 +54,10 @@ const addToCart = (lessonId) => {
 }
 
 // Function to remove an item from the cart
-const removeFromCart = (lessonId) => {
-  const index = lessonsList.value.findIndex(lesson => lesson.id === lessonId)
-  if(index === -1)
-    return
-
+const removeFromCart = (index) => {
   const cartItem = cart.value[index]
   cart.value.splice(index, 1)  // Remove item from cart
-  const lessonIndex = lessonsList.value.findIndex(item => item.Sport === cartItem.Sport)
+  const lessonIndex = lessonsList.value.findIndex(item => item.id === cartItem.id)
 
   if (lessonIndex !== -1) {
     lessonsList.value[lessonIndex].Spaces += cartItem.quantity  // Restore spaces to lessonsList

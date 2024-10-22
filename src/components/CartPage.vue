@@ -5,7 +5,7 @@
       <ul class="cart-list">
         <li v-for="(item, index) in cart" :key="index" class="cart-item">
           <span class="cart-item-name">{{ item.Sport }} - Quantity: {{ item.quantity }}</span>
-          <button v-on:click="$emit('removeFromCart', item.id)" class="remove-button">Remove</button>
+          <button v-on:click="$emit('removeFromCart', index)" class="remove-button">Remove</button>
         </li>
       </ul>
 
