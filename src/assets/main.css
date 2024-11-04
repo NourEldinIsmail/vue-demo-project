@@ -1,15 +1,15 @@
 @import './base.css';
 
 body {
-  background-color: #F4F4F7;
+  background-color: #f4f4f7;
 }
 
 button {
-  background: linear-gradient(45deg, #5A70E0, #7652DE);
+  background: linear-gradient(45deg, #5a70e0, #7652de);
 }
 
 button:hover {
-  background: linear-gradient(45deg, #7287F2, #8D6CF0);
+  background: linear-gradient(45deg, #7287f2, #8d6cf0);
 }
 
 #app {

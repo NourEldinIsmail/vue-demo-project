@@ -4,37 +4,48 @@
       <h2>Your Cart</h2>
       <ul class="cart-list">
         <li v-for="(item, index) in cart" :key="index" class="cart-item">
-          <span class="cart-item-name">{{ item.Sport }} - Quantity: {{ item.quantity }}</span>
-          <button v-on:click="$emit('removeFromCart', index)" class="remove-button">Remove</button>
+          <span class="cart-item-name"
+            >{{ item.Sport }} - Quantity: {{ item.quantity }}</span
+          >
+          <button
+            v-on:click="$emit('removeFromCart', index)"
+            class="remove-button"
+          >
+            Remove
+          </button>
         </li>
       </ul>
 
       <div class="checkout-form">
         <h3>Checkout</h3>
-        
+
         <label for="name">Name:</label>
-        <input 
-          type="text" 
-          id="name" 
-          v-model="customerName" 
+        <input
+          type="text"
+          id="name"
+          v-model="customerName"
           placeholder="Enter your name"
           @input="validateName"
         />
-        <p v-if="!isNameValid" class="error-msg">Name can only contain letters.</p>
+        <p v-if="!isNameValid" class="error-msg">
+          Name can only contain letters.
+        </p>
 
         <label for="phone">Phone:</label>
-        <input 
-          type="tel" 
-          id="phone" 
-          v-model="customerPhone" 
+        <input
+          type="tel"
+          id="phone"
+          v-model="customerPhone"
           placeholder="Enter your phone"
           @input="validatePhone"
         />
-        <p v-if="!isPhoneValid" class="error-msg">Phone must contain digits only.</p>
+        <p v-if="!isPhoneValid" class="error-msg">
+          Phone must contain digits only.
+        </p>
 
-        <button 
-          @click="$emit('checkout', customerName, customerPhone)" 
-          class="checkout-button" 
+        <button
+          @click="$emit('checkout', customerName, customerPhone)"
+          class="checkout-button"
           :disabled="!isFormValid"
         >
           Checkout
@@ -50,7 +61,7 @@ import { ref, computed } from 'vue'
 defineProps({
   cart: {
     type: Array,
-    required: true
+    required: true,
   },
 })
 
@@ -61,19 +72,24 @@ const isPhoneValid = ref(true)
 
 // Function to validate name (only letters allowed)
 const validateName = () => {
-  const nameRegex = /^[a-zA-Z]+$/  // Only letters
+  const nameRegex = /^[a-zA-Z]+$/ // Only letters
   isNameValid.value = nameRegex.test(customerName.value)
 }
 
 // Function to validate phone (only digits allowed)
 const validatePhone = () => {
-  const phoneRegex = /^\d+$/  // Only digits
+  const phoneRegex = /^\d+$/ // Only digits
   isPhoneValid.value = phoneRegex.test(customerPhone.value)
 }
 
 // Computed property to check if the form is valid (both fields must be valid)
-const isFormValid = computed(() => isNameValid.value && isPhoneValid.value && customerName.value && customerPhone.value)
-
+const isFormValid = computed(
+  () =>
+    isNameValid.value &&
+    isPhoneValid.value &&
+    customerName.value &&
+    customerPhone.value,
+)
 </script>
 
 <style scoped>
@@ -154,8 +170,8 @@ label {
   font-weight: bold;
 }
 
-input[type="text"],
-input[type="tel"] {
+input[type='text'],
+input[type='tel'] {
   width: 100%;
   padding: 0.5rem;
   border: 1px solid #ccc;
@@ -169,7 +185,7 @@ input[type="tel"] {
 }
 
 .checkout-button {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   padding: 0.5rem 1rem;
