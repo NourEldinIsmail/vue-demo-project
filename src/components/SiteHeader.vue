@@ -37,14 +37,16 @@ const props = defineProps({
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background: linear-gradient(45deg, #5a70e0, #7652de);
+  background: #333;
   color: #fff;
-  position: fixed; /* Fixes the header to the top */
-  top: 0; /* Positions it at the top */
-  left: 0; /* Aligns it to the left */
-  right: 0; /* Aligns it to the right */
-  z-index: 1000; /* Ensures it stays above other elements */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Adds a slight shadow */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin: 0 10rem 0 10rem;
+  border-radius: 0 0 20px 20px;
 }
 
 .site-brand {
@@ -52,21 +54,21 @@ const props = defineProps({
 }
 
 .site-name {
-  color: #fff; /* White text */
+  color: #fff;
   font-size: 2rem;
   margin: 0;
-  text-decoration: none; /* Remove underline from link */
+  text-decoration: none;
 }
 
 .cart-button {
-  background: #f4f4f7; /* Updated background color */
+  background: #f4f4f7;
   border: none;
-  border-radius: 20px; /* Rounded corners */
+  border-radius: 20px;
   cursor: pointer;
-  padding: 8px 12px; /* Padding for button */
+  padding: 8px 12px;
   display: flex;
   align-items: center;
-  opacity: 1; /* Fully visible when enabled */
+  opacity: 1;
 }
 
 .cart-button:hover {
@@ -74,17 +76,17 @@ const props = defineProps({
 }
 
 .cart-button:disabled {
-  opacity: 0.5; /* Dim button when disabled */
-  cursor: not-allowed; /* Change cursor when disabled */
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .cart-text {
-  margin-right: 5px; /* Space between text and icon */
-  font-weight: bold; /* Bold text */
+  margin-right: 5px;
+  font-weight: bold;
 }
 
 .cart-icon {
-  width: 24px; /* Adjusted icon size */
-  height: 24px; /* Adjusted icon size */
+  width: 24px;
+  height: 24px;
 }
 </style>

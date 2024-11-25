@@ -1,43 +1,13 @@
 @import './base.css';
 
 body {
-  background-color: #f4f4f7;
-}
-
-button {
-  background: linear-gradient(45deg, #5a70e0, #7652de);
-}
-
-button:hover {
-  background: linear-gradient(45deg, #7287f2, #8d6cf0);
+  background-color: #1e1e1e;
+  display: grid;
 }
 
 #app {
-  /* max-width: 1280px; */
-  display: flex;
   font-weight: normal;
-}
-
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
-}
-
-main {
-  margin-top: 70px;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
-
-@media (min-width: 1024px) {
-  body {
-    place-items: center;
-  }
+  width: 100%;
+  padding: 0 20rem 0 20rem;
+  top: 0;
 }

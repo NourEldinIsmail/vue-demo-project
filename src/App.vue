@@ -1,192 +1,106 @@
 <script setup>
-import { ref, watch } from 'vue'
-import LessonsDisplay from '/src/components/LessonsDisplay.vue'
-import SiteHeader from '/src/components/SiteHeader.vue'
-import SideBar from '/src/components/SideBar.vue'
-import CartPage from '/src/components/CartPage.vue'
-import CheckoutModal from '/src/components/CheckoutModal.vue'
-import SearchBox from '/src/components/SearchBox.vue'
+import { ref } from 'vue'
+import LessonCard from './components/LessonCard.vue'
+import SiteHeader from './components/SiteHeader.vue'
+import SortSearchBar from './components/SortSearchBar.vue'
+import CartPage from './components/CartPage.vue'
+import CheckoutModal from './components/CheckoutModal.vue'
 
-const sortField = ref('None')
-const sortOrder = ref('asc')
-const lessonsList = ref([])
+const lessons = ref([])
+const filteredLessons = ref([])
 const cart = ref([])
+const sortField = ref('')
+const sortOrder = ref('')
+const searchQuery = ref('')
 const showCart = ref(false)
-const showModal = ref(false) // To control the modal
-const modalMessage = ref('') // To store modal message
-const modalTitle = ref('') // To store modal title
-const searchQuery = ref('') // Store search query
+const showModal = ref(false)
+const modalTitle = ref('')
+const modalMessage = ref('')
 
-// Function to update sorting field and order
-const updateSorting = ({ field, order }) => {
-  sortField.value = field
-  sortOrder.value = order
+const fetchLessons = async () => {
+  const response = await fetch('https://express-app-xyl5.onrender.com/lessons')
+  const data = await response.json()
+  lessons.value = data
 }
 
-// Function to update the search query and filter the lessons
-const updateSearchQuery = query => {
-  searchQuery.value = query
-  fetchLessons()
-}
+fetchLessons()
 
-const addToCart = lessonId => {
-  const index = lessonsList.value.findIndex(lesson => lesson.id === lessonId)
-  if (index === -1) return
-
-  const updatedLessons = [...lessonsList.value]
-  if (updatedLessons[index].Spaces > 0) {
-    updatedLessons[index].Spaces -= 1
-
-    // Check if the lesson is already in the cart
-    const cartIndex = cart.value.findIndex(
-      item => item.Sport === updatedLessons[index].Sport,
-    )
-
-    if (cartIndex !== -1) {
-      // Increase quantity if it's already in the cart
-      cart.value[cartIndex].quantity += 1
-    } else {
-      // Add new item to cart with quantity 1
-      cart.value.push({ ...updatedLessons[index], quantity: 1 })
-    }
-  }
-  lessonsList.value = updatedLessons
-}
-
-// Function to remove an item from the cart
-const removeFromCart = index => {
-  const cartItem = cart.value[index]
-  cart.value.splice(index, 1)
-  const lessonIndex = lessonsList.value.findIndex(
-    item => item.id === cartItem.id,
-  )
-
-  if (lessonIndex !== -1) {
-    lessonsList.value[lessonIndex].Spaces += cartItem.quantity
-  }
-
-  if (cart.value.length === 0) {
-    toggleCart()
-  }
-}
-
-// Function to toggle cart visibility
 const toggleCart = () => {
   showCart.value = !showCart.value
 }
 
-// Function to handle checkout
-const checkout = async (customerName, customerPhone) => {
+const changeSorting = (field, order) => {
+  if(!field || !order) return
 
-  try {
-    const response = await fetch('https://express-app-xyl5.onrender.com/order', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: customerName,
-        phone: customerPhone,
-        lessons: cart.value,
-      }),
-    })
-    if (!response.ok) {
-      throw new Error('Error placing order')
-    }
-  } catch (error) {
-    console.error('Error placing order:', error)
-    modalTitle.value = 'Error'
-    modalMessage.value = 'An error occurred while placing your order. Please try again later.'
-    showModal.value = true
-    return
-  }
+  sortField.value = field
+  sortOrder.value = order
 
-  
-
-  try {
-    for (const lesson of cart.value) {
-      let index = lessonsList.value.findIndex(item => item.id === lesson.id)
-      const response = await fetch(`https://express-app-xyl5.onrender.com/lesson/${lesson.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          Spaces: lessonsList.value[index].Spaces,
-        }),
-      })
-      if (!response.ok) {
-        throw new Error('Error updating lessons')
-      }
-    }
-  } catch (error) {
-    console.error('Error updating lessons:', error)
-    modalTitle.value = 'Error'
-    modalMessage.value = 'An error occurred while updating lessons. Please try again later.'
-    showModal.value = true
-    return
-  }
-
-  cart.value = []
-  toggleCart()
-
-  // Show modal after successful checkout
-  modalTitle.value = 'Checkout Successful'
-  modalMessage.value = `Thank you, ${customerName}. Your order is confirmed! with following number: ${customerPhone}`
-  showModal.value = true
-}
-
-// Close modal function
-const closeModal = () => {
-  showModal.value = false
-}
-
-// Function to fetch lessons from the API
-const fetchLessons = () => {
-  fetch(`https://express-app-xyl5.onrender.com/lessons?search=${searchQuery.value}`)
-    .then(response => response.json())
-    .then(data => {
-      lessonsList.value = data
-    })
-    .catch(error => {
-    console.error('Error fetching lessons:', error)
-    })
-
-  for (const item of cart.value) {
-    let index = lessonsList.value.findIndex(lesson => lesson.id === item.id)
-    if (index !== -1) {
-      lessonsList.value[index].Spaces -= item.quantity
-    }
-  }
-}
-
-// Initial fetch of lessons when the component is mounted
-fetchLessons()
-
-// Watch for changes in sort field or sort order and sort the lessonsList in place
-watch([sortField, sortOrder, lessonsList], () => {
-  if (sortField.value == 'None') return
-
-  lessonsList.value.sort((a, b) => {
-    let compareA = a[sortField.value]
-    let compareB = b[sortField.value]
-
-    // Handle numeric sorting for fields like Price and Spaces
-    if (sortField.value === 'Price') {
-      compareA = parseInt(compareA.replace('$', '')) || compareA
-      compareB = parseInt(compareB.replace('$', '')) || compareB
-    } else if (sortField.value === 'Spaces') {
-      compareA = parseInt(compareA) || compareA
-      compareB = parseInt(compareB) || compareB
-    }
-
-    if (sortOrder.value === 'asc') {
-      return compareA > compareB ? 1 : -1
+  lessons.value.sort((a, b) => {
+    if (field === 'Spaces' || field === 'Price') {
+      return order === 'asc' ? Number(a[field]) - Number(b[field]) : Number(b[field]) - Number(a[field])
     } else {
-      return compareA < compareB ? 1 : -1
+      return order === 'asc' ? a[field].localeCompare(b[field]) : b[field].localeCompare(a[field])
     }
   })
-})
+
+  lessons.value = [...lessons.value]
+
+  filteredLessons.value.sort((a, b) => {
+    if (field === 'Spaces' || field === 'Price') {
+      return order === 'asc' ? Number(a[field]) - Number(b[field]) : Number(b[field]) - Number(a[field])
+    } else {
+      return order === 'asc' ? a[field].localeCompare(b[field]) : b[field].localeCompare(a[field])
+    }
+  })
+
+  filteredLessons.value = [...filteredLessons.value]
+}
+
+const changeSearchQuery = async (query) => {
+  if (!query) {
+    filteredLessons.value = []
+    searchQuery.value = ''
+    return
+  }
+
+  const response = await fetch(`https://express-app-xyl5.onrender.com/search?q=${query}`)
+  const data = await response.json()
+  
+  for(let lesson of cart.value) {
+    const lessonIndex = data.findIndex((item) => item.id === lesson.id)
+    if (lessonIndex !== -1) {
+      data[lessonIndex].Spaces-= lesson.quantity
+    }
+  }
+
+  filteredLessons.value = data
+
+  searchQuery.value = query
+
+  changeSorting(sortField.value, sortOrder.value)
+}
+
+const addToCart = (lessonId) => {
+  const lesson = lessons.value.find((lesson) => lesson.id === lessonId)
+  const existingCartItem = cart.value.find((item) => item.id === lessonId)
+
+  if (existingCartItem) {
+    existingCartItem.quantity++
+  } else {
+    cart.value.push({ id: lesson.id, quantity: 1 })
+  }
+
+  lesson.Spaces--
+
+  const filteredLesson = filteredLessons.value.find((lesson) => lesson.id === lessonId)
+  filteredLesson.Spaces--
+
+  changeSorting(sortField.value, sortOrder.value)
+}
+
+const removeFromCart = () => {}
+
+const checkout = () => {}
 </script>
 
 <template>
@@ -195,32 +109,31 @@ watch([sortField, sortOrder, lessonsList], () => {
     :cartDisabled="cart.length === 0"
     @toggleCart="toggleCart"
   />
-  <SideBar
+
+  <SortSearchBar
     :selectedSortField="sortField"
     :selectedSortOrder="sortOrder"
-    @updateSort="updateSorting"
+    :changeSort="changeSorting"
+    :changeSearchQuery="changeSearchQuery"
   />
-  <main>
-    <SearchBox @updateSearchQuery="updateSearchQuery" />
-    <LessonsDisplay
-      :lessons="lessonsList"
-      @addToCart="addToCart"
-    />
-    <CartPage
-      v-if="showCart"
-      :cart="cart"
-      @removeFromCart="removeFromCart"
-      @checkout="checkout"
-    />
-    <CheckoutModal
-      v-if="showModal"
-      :title="modalTitle"
-      :message="modalMessage"
-      :onClose="closeModal"
-    />
-  </main>
+
+  <LessonCard v-for="lesson in (searchQuery? filteredLessons : lessons)" :key="lesson.id" :lesson="lesson" :addToCart="addToCart" />
+
+  <CartPage
+    v-if="showCart"
+    :cart="cart"
+    @removeFromCart="removeFromCart"
+    @checkout="checkout"
+  />
+
+  <CheckoutModal
+    v-if="showModal"
+    :title="modalTitle"
+    :message="modalMessage"
+    :onClose="closeModal"
+  />
+
 </template>
 
 <style scoped>
-/* Same styles as before */
 </style>
