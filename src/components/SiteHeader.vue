@@ -5,7 +5,7 @@
     </div>
     <button
       class="cart-button"
-      v-on:click="$emit('toggleCart')"
+      v-on:click="$emit('toggleDrawar')"
       :disabled="props.cartDisabled"
     >
       <span class="cart-text">Cart</span>

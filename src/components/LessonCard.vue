@@ -1,30 +1,24 @@
 <template>
-    <div
-      class="card"
-    >
-      <h1>{{ lesson.Sport }}</h1>
+  <div class="card">
+    <h1>{{ lesson.Sport }}</h1>
 
-      <div class="content">
-        <div class="info">
-          <p>Location: {{ lesson.Location }}</p>
-          <p>Price: ${{ lesson.Price }}</p>
-          <p>Spaces: {{ lesson.Spaces }}</p>
-        </div>
-        <img
-            :src="lesson.icon"
-            :alt="lesson.Sport + ' image'"
-            class="image"
-          />
+    <div class="content">
+      <div class="info">
+        <p>Location: {{ lesson.Location }}</p>
+        <p>Price: ${{ lesson.Price }}</p>
+        <p>Spaces: {{ lesson.Spaces }}</p>
       </div>
-
-      <button
-        v-on:click="props.addToCart(lesson.id)"
-        :disabled="lesson.Spaces === 0"
-        class="add-button"
-      >
-        +
-      </button>
+      <img :src="lesson.icon" :alt="lesson.Sport + ' image'" class="image" />
     </div>
+
+    <button
+      v-on:click="props.addToCart(lesson.id)"
+      :disabled="lesson.Spaces === 0"
+      class="add-button"
+    >
+      +
+    </button>
+  </div>
 </template>
 
 <script setup>
@@ -36,7 +30,7 @@ const props = defineProps({
   addToCart: {
     type: Function,
     required: true,
-  }
+  },
 })
 </script>
 

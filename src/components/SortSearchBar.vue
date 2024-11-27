@@ -28,7 +28,12 @@
       </select>
     </div>
 
-    <button v-on:click="changeSort(localSortField, localSortOrder)" class="apply-button">Apply</button>
+    <button
+      v-on:click="changeSort(localSortField, localSortOrder)"
+      class="apply-button"
+    >
+      Apply
+    </button>
   </div>
 </template>
 
@@ -43,13 +48,12 @@ const props = defineProps({
   changeSearchQuery: {
     type: Function,
     required: true,
-  }
+  },
 })
 
 const localSortField = ref('')
 const localSortOrder = ref('')
 const localSearchQuery = ref('')
-
 </script>
 
 <style scoped>
